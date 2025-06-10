@@ -26,11 +26,11 @@ const Grid = () => {
           .flatMap((page) => page.data)
           .map((gif) => (
             <LazyImage
-              className="mt-4"
+              containerClassName="mt-4 rounded-md"
               key={gif.id}
               src={gif.images.original.url}
               alt={gif.title}
-              height={`${gif.images.original.height}px`}
+              height={`200px`}
               sources={[
                 {
                   type: "image/webp",
@@ -47,9 +47,9 @@ const Grid = () => {
             aria-label="Load more GIFs"
             title="Load more GIFs"
             onClick={() => fetchNextPage()}
-            className="px-4 py-2 text-white bg-blue-500 rounded cursor-pointer"
+            className="px-4 py-2 text-white bg-blue-500 rounded cursor-pointer hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Load More
+            {isFetchingNextPage ? "Loading..." : "Load More"}
           </button>
         )}
       </div>
