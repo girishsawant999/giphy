@@ -74,17 +74,33 @@ function App() {
         setSearchQuery={setSearchQuery}
         fetching={isSearchingGifs}
       />
-      {debouncedQuery && isFetched && (
-        <GifsGrid
-          data={searchData?.pages.flatMap((page) => page.data ?? []) || []}
-          hasNextPage={hasSearchNextPage}
-          fetchNextPage={fetchSearchNextPage}
-          isFetchingNextPage={isSearchingNextPage}
-        />
+      {/* Search GIFs */}
+      {debouncedQuery && (
+        <>
+          {searchData?.pages &&
+          searchData.pages.length > 0 &&
+          searchData.pages[0].data.length > 0 ? (
+            <GifsGrid
+              data={searchData.pages.flatMap((page) => page.data ?? [])}
+              hasNextPage={hasSearchNextPage}
+              fetchNextPage={fetchSearchNextPage}
+              isFetchingNextPage={isSearchingNextPage}
+            />
+          ) : (
+            isFetched &&
+            !isSearchingGifs && (
+              <div className="text-center text-gray-500 mt-8 italic text-shadow-rose-500">
+                No GIFs found. Try searching for something else!
+              </div>
+            )
+          )}
+        </>
       )}
-      {(!debouncedQuery || !isFetched) && (
+
+      {/* Trending GIFs */}
+      {!debouncedQuery && data?.pages && (
         <GifsGrid
-          data={data?.pages.flatMap((page) => page?.data ?? []) ?? []}
+          data={data.pages.flatMap((page) => page.data ?? [])}
           hasNextPage={hasNextPage}
           fetchNextPage={fetchNextPage}
           isFetchingNextPage={isFetchingNextPage}
