@@ -70,9 +70,15 @@ const LazyImage: React.FC<LazyImageProps> = ({
     onError?.();
   };
 
+  const copyImage = () => {
+    if (imgRef.current) {
+      navigator.clipboard.writeText(imgRef.current.src);
+    }
+  };
+
   return (
     <div
-      className={`relative overflow-hidden ${containerClassName}`}
+      className={`relative group overflow-hidden ${containerClassName}`}
       style={{ width, height: !isLoaded ? height : "auto" }}
       ref={containerRef}
     >
@@ -109,6 +115,21 @@ const LazyImage: React.FC<LazyImageProps> = ({
           />
         </picture>
       )}
+
+      <button
+        onClick={copyImage}
+        className="p-1 opacity-0 pointer-events-none group-hover:pointer-events-auto transition-opacity  group-hover:opacity-100 cursor-pointer text-white  rounded-md bg-black/70 absolute top-2 right-2"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="14"
+          height="14"
+          fill="#fff"
+          viewBox="0 0 256 256"
+        >
+          <path d="M180,64H40A12,12,0,0,0,28,76V216a12,12,0,0,0,12,12H180a12,12,0,0,0,12-12V76A12,12,0,0,0,180,64ZM168,204H52V88H168ZM228,40V180a12,12,0,0,1-24,0V52H76a12,12,0,0,1,0-24H216A12,12,0,0,1,228,40Z"></path>
+        </svg>
+      </button>
     </div>
   );
 };

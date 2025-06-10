@@ -17,19 +17,27 @@ const GifsGrid: React.FC<TProps> = ({
     <>
       <div className="columns-[200px] px-4 my-6">
         {data.map((gif) => (
-          <LazyImage
-            containerClassName="mt-4 rounded-md"
+          <div
             key={gif.images.original.url}
-            src={gif.images.original.url}
-            alt={gif.title}
-            height={`200px`}
-            sources={[
-              {
-                type: "image/webp",
-                srcset: gif.images.fixed_width.webp,
-              },
-            ]}
-          />
+            className="relative group overflow-hidden"
+          >
+            <LazyImage
+              containerClassName="mt-4 rounded-md"
+              src={gif.images.original.url}
+              alt={gif.title}
+              height={`200px`}
+              sources={[
+                {
+                  type: "image/webp",
+                  srcset: gif.images.fixed_width.webp,
+                },
+              ]}
+            />
+
+            <div className="opacity-0 translate-y-full group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 absolute bottom-0 left-0 right-0 bg-black/90 bg-opacity-50 text-white text-sm p-2 rounded-b-md">
+              {gif.title || "Untitled"}
+            </div>
+          </div>
         ))}
       </div>
       <div className="flex items-center justify-center my-4">
