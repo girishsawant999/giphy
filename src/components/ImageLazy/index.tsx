@@ -1,4 +1,5 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import useInView from "@/hooks/useInView";
+import React, { useMemo, useRef, useState } from "react";
 
 // Array of placeholder colors
 const PLACEHOLDER_COLORS = [
@@ -46,36 +47,19 @@ const LazyImage: React.FC<LazyImageProps> = ({
   onError,
 }) => {
   const [isLoaded, setIsLoaded] = useState(false);
-  const [isInView, setIsInView] = useState(false);
   const [error, setError] = useState(false);
   const imgRef = useRef<HTMLImageElement>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
+
+  const [containerRef, isInView] = useInView<HTMLDivElement>({
+    threshold,
+    once: true, // Only trigger once when the element comes into view
+  });
 
   // Generate a random color from the array on component mount
   const randomColor = useMemo(() => {
     const randomIndex = Math.floor(Math.random() * placeholderColors.length);
     return placeholderColors[randomIndex];
   }, [placeholderColors]);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsInView(true);
-          observer.disconnect();
-        }
-      },
-      { threshold }
-    );
-
-    if (containerRef.current) {
-      observer.observe(containerRef.current);
-    }
-
-    return () => {
-      observer.disconnect();
-    };
-  }, [threshold]);
 
   const handleLoad = () => {
     setIsLoaded(true);
