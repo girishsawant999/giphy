@@ -1,6 +1,7 @@
 import Grid from "@/components/Grid";
 import Header from "@/components/Header";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import Search from "./components/Search";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -16,7 +17,8 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <Header />
-      <section className="container mx-auto py-6">
+      <Search />
+      <section className="container mx-auto py-6 px-4">
         <Grid />
       </section>
     </QueryClientProvider>
