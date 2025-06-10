@@ -16,7 +16,13 @@ class GiphyService {
     }
   }
 
-  async getTrendingGifs(limit = 10, offset = 0) {
+  async getTrendingGifs({
+    limit = 10,
+    offset = 0,
+  }: {
+    limit?: number;
+    offset?: number;
+  }) {
     try {
       const response = await axios.get<TMetaAndPaginatedType<TGifData>>(
         `https://api.giphy.com/v1/gifs/trending?api_key=${this.apiKey}&limit=${limit}&offset=${offset}`
@@ -28,14 +34,22 @@ class GiphyService {
     }
   }
 
-  async searchGifs(query: string, limit = 10) {
+  async searchGifs({
+    query,
+    limit = 10,
+    offset = 0,
+  }: {
+    query: string;
+    limit?: number;
+    offset?: number;
+  }) {
     try {
-      const response = await axios.get(
+      const response = await axios.get<TMetaAndPaginatedType<TGifData>>(
         `https://api.giphy.com/v1/gifs/search?api_key=${
           this.apiKey
-        }&q=${encodeURIComponent(query)}&limit=${limit}`
+        }&q=${encodeURIComponent(query)}&limit=${limit}&offset=${offset}`
       );
-      return response.data.data;
+      return response.data;
     } catch (error) {
       console.error("Error searching GIFs:", error);
       throw error;
