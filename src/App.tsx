@@ -89,7 +89,7 @@ function App() {
           ) : (
             isFetched &&
             !isSearchingGifs && (
-              <div className="text-center text-gray-500 mt-8 italic text-shadow-rose-500">
+              <div className="text-center text-gray-500 mt-8 italic text-shadow-rose-500 px-4">
                 No GIFs found. Try searching for something else!
               </div>
             )
