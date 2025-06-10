@@ -52,10 +52,9 @@ const LazyImage: React.FC<LazyImageProps> = ({
 
   const [containerRef, isInView] = useInView<HTMLDivElement>({
     threshold,
-    once: true, // Only trigger once when the element comes into view
+    once: true,
   });
 
-  // Generate a random color from the array on component mount
   const randomColor = useMemo(() => {
     const randomIndex = Math.floor(Math.random() * placeholderColors.length);
     return placeholderColors[randomIndex];
@@ -77,7 +76,6 @@ const LazyImage: React.FC<LazyImageProps> = ({
       style={{ width, height: !isLoaded ? height : "auto" }}
       ref={containerRef}
     >
-      {/* Random Color Placeholder */}
       {(!isLoaded || !isInView) && (
         <div
           className={`absolute inset-0 ${loadingClassName}`}
@@ -89,7 +87,6 @@ const LazyImage: React.FC<LazyImageProps> = ({
         />
       )}
 
-      {/* Actual Image with Picture Element - Hidden until loaded */}
       {isInView && (
         <picture>
           {sources.map((source, index) => (
