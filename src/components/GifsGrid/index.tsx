@@ -15,7 +15,7 @@ const GifsGrid: React.FC<TProps> = ({
 }) => {
   return (
     <>
-      <div className="columns-[200px] px-4 my-6">
+      <div className="columns-[150px] px-4 mt-2 mb-4 md:columns-[220px] gap-4">
         {data.map((gif) => (
           <div
             key={gif.images.original.url}
