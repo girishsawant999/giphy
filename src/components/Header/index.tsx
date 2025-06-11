@@ -8,10 +8,12 @@ const TOP_NAVIGATION_LIST = [
   "Artists",
 ];
 
-const Header: React.FC<{
+type THeaderProps = {
   onLogoClick: () => void;
   setSearchQuery: React.Dispatch<React.SetStateAction<string>>;
-}> = ({ onLogoClick, setSearchQuery }) => {
+};
+
+const Header: React.FC<THeaderProps> = ({ onLogoClick, setSearchQuery }) => {
   return (
     <header className="flex items-center justify-between p-4 ">
       <div
