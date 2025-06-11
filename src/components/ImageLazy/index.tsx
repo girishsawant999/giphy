@@ -1,4 +1,4 @@
-import useInView from "@/hooks/useInView";
+import { useInView } from "motion/react";
 import React, { useMemo, useRef, useState } from "react";
 
 // Array of placeholder colors
@@ -49,10 +49,11 @@ const LazyImage: React.FC<LazyImageProps> = ({
   const [isLoaded, setIsLoaded] = useState(false);
   const [error, setError] = useState(false);
   const imgRef = useRef<HTMLImageElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
-  const [containerRef, isInView] = useInView<HTMLDivElement>({
-    threshold,
+  const isInView = useInView(containerRef, {
     once: true,
+    amount: threshold,
   });
 
   const randomColor = useMemo(() => {
