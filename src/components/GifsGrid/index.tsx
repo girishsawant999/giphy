@@ -1,13 +1,19 @@
 import LazyImage from "@/components/ImageLazy";
 import useResizeObserver from "@/hooks/useResizeObserver";
-import { AnimatePresence, motion } from "motion/react";
+import { AnimatePresence } from "motion/react";
 
 const splitIntoColumns = (data: TGifData[], columns: number) => {
-  const result: TGifData[][] = Array.from({ length: columns }, () => []);
-  data.forEach((item, index) => {
-    result[index % columns].push(item);
-  });
-  return result;
+  return data.reduce(
+    (result: TGifData[][], item, index) => {
+      const columnIndex = index % columns;
+      if (!result[columnIndex]) {
+        result[columnIndex] = [];
+      }
+      result[columnIndex].push(item);
+      return result;
+    },
+    Array.from({ length: columns }, () => [])
+  );
 };
 
 type TProps = {
@@ -40,12 +46,9 @@ const GifsGrid: React.FC<TProps> = ({
         {columnsData.map((column, colIdx) => (
           <div key={colIdx} className="flex flex-col gap-0.5 md:gap-2">
             {column.map((gif) => (
-              <motion.div
+              <div
                 key={gif.images.original.url}
                 className="relative group overflow-hidden"
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.95 }}
               >
                 <LazyImage
                   containerClassName="mb-1.5 md:mb-2 rounded-md"
@@ -62,7 +65,7 @@ const GifsGrid: React.FC<TProps> = ({
                 <div className="opacity-0 translate-y-full group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 absolute bottom-0 left-0 right-0 bg-black/90 bg-opacity-50 text-white text-sm p-2 rounded-b-md">
                   {gif.title || "Untitled"}
                 </div>
-              </motion.div>
+              </div>
             ))}
           </div>
         ))}
