@@ -1,17 +1,63 @@
+import { motion } from "motion/react";
+import { useRef } from "react";
+
 type TSearchProps = {
   searchQuery: string;
   setSearchQuery: (query: string) => void;
   fetching: boolean;
+  isHeaderVisible: boolean;
 };
 
 const Search: React.FC<TSearchProps> = ({
   searchQuery,
   setSearchQuery,
   fetching,
+  isHeaderVisible,
 }) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+
   return (
-    <div className="p-2 mx-2 sticky top-0 z-10 dark:bg-gray-900 rounded-sm  bg-gray-50 ">
-      <div className="grid grid-cols-[1fr_auto] ring-1 ring-gray-200  items-stretch bg-white text-gray-900 placeholder:text-gray-300 rounded-md overflow-hidden text-lg">
+    <div
+      ref={containerRef}
+      className="p-2 px-4 overflow-hidden sticky top-0 z-10 dark:bg-gray-900 rounded-sm  bg-gray-50 flex items-center w-full gap-5"
+    >
+      <>
+        {!isHeaderVisible && (
+          <motion.div
+            initial={{ y: -60 }}
+            animate={{ y: 0 }}
+            exit={{ y: -60 }}
+            transition={{
+              ease: [0.25, 0.1, 0.25, 1],
+            }}
+            className="text-gray-800 dark:text-gray-200 text-lg font-semibold mb-2 hidden sm:block"
+          >
+            <div
+              role="button"
+              className="flex items-center gap-2 cursor-pointer flex-1"
+              onClick={() => setSearchQuery("")}
+            >
+              <img
+                src="/logo.svg"
+                alt="Giphy logo"
+                className="w-6 md:w-7 h-auto"
+              />
+              <img
+                src="/giphy.svg"
+                alt="Giphy logo"
+                className="max-h-5 md:max-h-10  hidden dark:block"
+              />
+              <img
+                src="/giphy-dark.svg"
+                alt="Giphy logo"
+                className="block dark:hidden max-h-9"
+              />
+            </div>
+          </motion.div>
+        )}
+      </>
+
+      <motion.div className="grid flex-1 grid-cols-[1fr_auto] ring-1 ring-gray-200  items-stretch bg-white text-gray-900 placeholder:text-gray-300 rounded-md overflow-hidden text-lg">
         <input
           type="text"
           className="flex-1 py-1.5  px-4 md:py-3 border-none outline-none"
@@ -44,7 +90,7 @@ const Search: React.FC<TSearchProps> = ({
             </svg>
           )}
         </button>
-      </div>
+      </motion.div>
     </div>
   );
 };

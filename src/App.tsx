@@ -1,7 +1,8 @@
 import GifsGrid from "@/components/GifsGrid";
 import Header from "@/components/Header";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
+import { useInView } from "motion/react";
+import { useEffect, useRef, useState } from "react";
 import Search from "./components/Search";
 import withQueryClient from "./components/withQueryClient";
 import useDebounce from "./hooks/useDebounce";
@@ -12,6 +13,10 @@ const perPage = 20;
 function App() {
   const urlSearchParams = new URLSearchParams(window.location.search);
   const initialSearchQuery = urlSearchParams.get("search") || "";
+
+  const headerRef = useRef<HTMLElement>(null);
+
+  const isHeaderVisible = useInView(headerRef);
 
   const [searchQuery, setSearchQuery] = useState(initialSearchQuery);
 
@@ -75,8 +80,13 @@ function App() {
 
   return (
     <>
-      <Header onLogoClick={onLogoClick} setSearchQuery={setSearchQuery} />
+      <Header
+        onLogoClick={onLogoClick}
+        setSearchQuery={setSearchQuery}
+        headerRef={headerRef}
+      />
       <Search
+        isHeaderVisible={isHeaderVisible}
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
         fetching={isSearchingGifs}

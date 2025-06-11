@@ -11,11 +11,16 @@ const TOP_NAVIGATION_LIST = [
 type THeaderProps = {
   onLogoClick: () => void;
   setSearchQuery: React.Dispatch<React.SetStateAction<string>>;
+  headerRef: React.RefObject<HTMLElement | null>;
 };
 
-const Header: React.FC<THeaderProps> = ({ onLogoClick, setSearchQuery }) => {
+const Header: React.FC<THeaderProps> = ({
+  onLogoClick,
+  setSearchQuery,
+  headerRef,
+}) => {
   return (
-    <header className="flex items-center justify-between p-4 ">
+    <header className="flex items-center justify-between p-4 " ref={headerRef}>
       <div
         role="button"
         className="flex items-center gap-2 cursor-pointer flex-1"
