@@ -10,7 +10,10 @@ import giphyService from "./services/giphy";
 const perPage = 20;
 
 function App() {
-  const [searchQuery, setSearchQuery] = useState("");
+  const urlSearchParams = new URLSearchParams(window.location.search);
+  const initialSearchQuery = urlSearchParams.get("search") || "";
+
+  const [searchQuery, setSearchQuery] = useState(initialSearchQuery);
 
   const debouncedQuery = useDebounce(searchQuery, 500);
 
@@ -66,26 +69,53 @@ function App() {
     enabled: !!debouncedQuery,
   });
 
+  const onLogoClick = () => {
+    setSearchQuery("");
+  };
+
   return (
     <>
-      <Header />
+      <Header onLogoClick={onLogoClick} setSearchQuery={setSearchQuery} />
       <Search
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
         fetching={isSearchingGifs}
       />
+      <div className="w-full h-auto px-4 mt-4">
+        <img
+          className="h-auto w-full object-contain"
+          src="https://media.giphy.com/headers/2022-06-01-21-1654089664/PRIDE_BANNER_HP.gif"
+          alt="All of the Pride Month GIFs!"
+        />
+      </div>
+
       {/* Search GIFs */}
       {debouncedQuery && (
         <>
           {searchData?.pages &&
           searchData.pages.length > 0 &&
           searchData.pages[0].data.length > 0 ? (
-            <GifsGrid
-              data={searchData.pages.flatMap((page) => page.data ?? [])}
-              hasNextPage={hasSearchNextPage}
-              fetchNextPage={fetchSearchNextPage}
-              isFetchingNextPage={isSearchingNextPage}
-            />
+            <div>
+              <h2 className="mx-4 mt-4 flex items-center gap-2 text-2xl font-semibold text-gray-800 dark:text-gray-200 tracking-tight">
+                <img
+                  src="/magnifying-glass.svg"
+                  alt="Search"
+                  className="inline-block"
+                  width={24}
+                  height={24}
+                />
+                Search results for
+                <span className="underline text-blue-400">
+                  {debouncedQuery}
+                </span>
+              </h2>
+              <GifsGrid
+                data={searchData.pages.flatMap((page) => page.data ?? [])}
+                hasNextPage={hasSearchNextPage}
+                fetchNextPage={fetchSearchNextPage}
+                isFetchingNextPage={isSearchingNextPage}
+              />
+            </div>
           ) : (
             isFetched &&
             !isSearchingGifs && (
@@ -99,12 +129,25 @@ function App() {
 
       {/* Trending GIFs */}
       {!debouncedQuery && data?.pages && (
-        <GifsGrid
-          data={data.pages.flatMap((page) => page.data ?? [])}
-          hasNextPage={hasNextPage}
-          fetchNextPage={fetchNextPage}
-          isFetchingNextPage={isFetchingNextPage}
-        />
+        <div>
+          <h2 className="mx-4 mt-4 flex items-center gap-2 text-2xl font-semibold text-gray-800 dark:text-gray-200 tracking-tight">
+            <img
+              src="/trending.svg"
+              alt="Trending"
+              className="inline-block"
+              width={24}
+              height={24}
+            />
+            Trending Now
+          </h2>
+
+          <GifsGrid
+            data={data.pages.flatMap((page) => page.data ?? [])}
+            hasNextPage={hasNextPage}
+            fetchNextPage={fetchNextPage}
+            isFetchingNextPage={isFetchingNextPage}
+          />
+        </div>
       )}
     </>
   );
