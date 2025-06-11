@@ -1,7 +1,7 @@
 import GifsGrid from "@/components/GifsGrid";
 import Header from "@/components/Header";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { useInView } from "motion/react";
+import { motion, useInView } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 import Search from "./components/Search";
 import withQueryClient from "./components/withQueryClient";
@@ -91,13 +91,21 @@ function App() {
         setSearchQuery={setSearchQuery}
         fetching={isSearchingGifs}
       />
-      <div className="w-full h-auto px-4 mt-4">
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{
+          ease: [0.25, 0.1, 0.25, 1],
+        }}
+        exit={{ opacity: 0, y: -20 }}
+        className="w-full h-auto px-4 mt-4"
+      >
         <img
           className="h-auto w-full object-contain"
           src="https://media.giphy.com/headers/2022-06-01-21-1654089664/PRIDE_BANNER_HP.gif"
           alt="All of the Pride Month GIFs!"
         />
-      </div>
+      </motion.div>
 
       {/* Search GIFs */}
       {debouncedQuery && (
@@ -105,8 +113,14 @@ function App() {
           {searchData?.pages &&
           searchData.pages.length > 0 &&
           searchData.pages[0].data.length > 0 ? (
-            <div>
-              <h2 className="mx-4 mt-4 flex items-center gap-2 text-2xl font-semibold text-gray-800 dark:text-gray-200 tracking-tight">
+            <motion.div
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{
+                ease: [0.25, 0.1, 0.25, 1],
+              }}
+            >
+              <h2 className="mx-4 mb-2  mt-4 flex items-center gap-2 text-2xl font-semibold text-gray-800 dark:text-gray-200 tracking-tight">
                 <img
                   src="/magnifying-glass.svg"
                   alt="Search"
@@ -125,13 +139,20 @@ function App() {
                 fetchNextPage={fetchSearchNextPage}
                 isFetchingNextPage={isSearchingNextPage}
               />
-            </div>
+            </motion.div>
           ) : (
             isFetched &&
             !isSearchingGifs && (
-              <div className="text-center text-gray-500 mt-8 italic text-shadow-rose-500 px-4">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{
+                  ease: [0.25, 0.1, 0.25, 1],
+                }}
+                className="text-center text-gray-500 mt-8 italic text-shadow-rose-500 px-4"
+              >
                 No GIFs found. Try searching for something else!
-              </div>
+              </motion.div>
             )
           )}
         </>
@@ -139,8 +160,14 @@ function App() {
 
       {/* Trending GIFs */}
       {!debouncedQuery && data?.pages && (
-        <div>
-          <h2 className="mx-4 mt-4 flex items-center gap-2 text-2xl font-semibold text-gray-800 dark:text-gray-200 tracking-tight">
+        <motion.div
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{
+            ease: [0.25, 0.1, 0.25, 1],
+          }}
+        >
+          <h2 className="mx-4 mb-2  mt-4 flex items-center gap-2 text-2xl font-semibold text-gray-800 dark:text-gray-200 tracking-tight">
             <img
               src="/trending.svg"
               alt="Trending"
@@ -157,7 +184,7 @@ function App() {
             fetchNextPage={fetchNextPage}
             isFetchingNextPage={isFetchingNextPage}
           />
-        </div>
+        </motion.div>
       )}
     </>
   );
