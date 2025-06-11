@@ -35,10 +35,10 @@ const GifsGrid: React.FC<TProps> = ({
         style={{
           gridTemplateColumns: `repeat(${columnCount}, minmax(0, 1fr))`,
         }}
-        className="grid  gap-4 px-4 mt-2 mb-4"
+        className="grid gap-1.5 md:gap-3 px-4 mt-2 mb-4"
       >
         {columnsData.map((column, colIdx) => (
-          <div key={colIdx} className="flex flex-col gap-2">
+          <div key={colIdx} className="flex flex-col gap-0.5 md:gap-2">
             {column.map((gif) => (
               <motion.div
                 key={gif.images.original.url}
