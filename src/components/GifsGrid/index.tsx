@@ -1,4 +1,5 @@
 import LazyImage from "@/components/ImageLazy";
+import { AnimatePresence, motion } from "motion/react";
 
 type TProps = {
   data: TGifData[];
@@ -14,15 +15,18 @@ const GifsGrid: React.FC<TProps> = ({
   isFetchingNextPage,
 }) => {
   return (
-    <>
-      <div className="columns-[150px] px-4 mt-2 mb-4 md:columns-[220px] gap-4">
+    <AnimatePresence>
+      <div className="columns-[150px] [column-gap:6px] md:[column-gap:8px]   px-4 mt-2 mb-4 md:columns-[220px] gap-4">
         {data.map((gif) => (
-          <div
+          <motion.div
             key={gif.images.original.url}
             className="relative group overflow-hidden"
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
           >
             <LazyImage
-              containerClassName="mt-4 rounded-md"
+              containerClassName="mb-1.5 md:mb-2 rounded-md"
               src={gif.images.original.url}
               alt={gif.title}
               height={`200px`}
@@ -37,7 +41,7 @@ const GifsGrid: React.FC<TProps> = ({
             <div className="opacity-0 translate-y-full group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 absolute bottom-0 left-0 right-0 bg-black/90 bg-opacity-50 text-white text-sm p-2 rounded-b-md">
               {gif.title || "Untitled"}
             </div>
-          </div>
+          </motion.div>
         ))}
       </div>
       <div className="flex items-center justify-center my-4">
@@ -65,7 +69,7 @@ const GifsGrid: React.FC<TProps> = ({
           </button>
         )}
       </div>
-    </>
+    </AnimatePresence>
   );
 };
 
