@@ -24,7 +24,7 @@ const GifsGrid: React.FC<TProps> = ({
   isFetchingNextPage,
 }) => {
   const { ref, dimensions } = useResizeObserver();
-  const columnCount = Math.floor(dimensions.width / 192) || 1;
+  const columnCount = Math.min(4, Math.floor(dimensions.width / 150)) || 1;
 
   const columnsData = splitIntoColumns(data, columnCount);
 
