@@ -1,3 +1,4 @@
+import { motion } from "motion/react";
 import type React from "react";
 
 const TOP_NAVIGATION_LIST = [
@@ -38,7 +39,14 @@ const Header: React.FC<THeaderProps> = ({
           className="block dark:hidden max-h-9"
         />
       </div>
-      <nav>
+      <motion.nav
+        initial={{ opacity: 0, y: -50 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -50 }}
+        transition={{
+          ease: [0.25, 0.1, 0.25, 1],
+        }}
+      >
         <ul className="hidden sm:flex items-center text-gray-800 dark:text-gray-200 font-semibold tracking-tight relative">
           {TOP_NAVIGATION_LIST.map((navItem, index) => (
             <li
@@ -58,7 +66,7 @@ const Header: React.FC<THeaderProps> = ({
 
           <div className="absolute inset-0 [background:_linear-gradient(to_right,_#00ccff,_rgb(153,_51,_255)_31%,_#e646b6_52%,_rgb(255,_249,_170)_77%,_rgb(0,_255,_153),_rgb(0,_204,_255))_0%_50%_/_200%_50%]"></div>
         </ul>
-      </nav>
+      </motion.nav>
     </header>
   );
 };
