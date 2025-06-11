@@ -14,7 +14,7 @@ const Search: React.FC<TSearchProps> = ({
       <div className="grid grid-cols-[1fr_auto] ring-1 ring-gray-200  items-stretch bg-white text-gray-900 placeholder:text-gray-300 rounded-md overflow-hidden text-lg">
         <input
           type="text"
-          className="flex-1 px-4 py-3 border-none outline-none"
+          className="flex-1 py-1.5  px-4 md:py-3 border-none outline-none"
           placeholder="Search GIFs..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
