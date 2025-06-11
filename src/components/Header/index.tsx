@@ -36,9 +36,11 @@ const Header: React.FC<THeaderProps> = ({ onLogoClick, setSearchQuery }) => {
       <nav>
         <ul className="hidden sm:flex items-center text-gray-800 dark:text-gray-200 font-semibold tracking-tight relative">
           {TOP_NAVIGATION_LIST.map((navItem, index) => (
-            <li className="z-10 text-base relative px-2 text-center  border-s-8 border-gray-50  before:absolute before:transition-[bottom]  hover:before:bottom-full  before:bg-gray-50 dark:before:bg-gray-900 dark:border-gray-900  before:inset-0 before:z-[-1]  before:bottom-0.5">
+            <li
+              key={index + navItem}
+              className="z-10 text-base relative px-2 text-center  border-s-8 border-gray-50  before:absolute before:transition-[bottom]  hover:before:bottom-full  before:bg-gray-50 dark:before:bg-gray-900 dark:border-gray-900  before:inset-0 before:z-[-1]  before:bottom-0.5"
+            >
               <span
-                key={index + navItem}
                 onClick={() => {
                   setSearchQuery(navItem);
                 }}
