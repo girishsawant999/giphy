@@ -1,6 +1,7 @@
 import LazyImage from "@/components/ImageLazy";
 import useResizeObserver from "@/hooks/useResizeObserver";
-import { AnimatePresence } from "motion/react";
+import { AnimatePresence, useInView } from "motion/react";
+import { useEffect, useRef } from "react";
 
 const splitIntoColumns = (data: TGifData[], columns: number) => {
   return data.reduce(
@@ -15,6 +16,35 @@ const splitIntoColumns = (data: TGifData[], columns: number) => {
     Array.from({ length: columns }, () => [])
   );
 };
+
+const Loader = () => (
+  <div className="flex items-center gap-3">
+    <div
+      className="size-2 bg-green-600 animate-ping"
+      style={{
+        animationDelay: "0s",
+      }}
+    ></div>
+    <div
+      className="size-2 bg-amber-600 animate-ping"
+      style={{
+        animationDelay: "75ms",
+      }}
+    ></div>
+    <div
+      className="size-2 bg-blue-600 animate-ping"
+      style={{
+        animationDelay: "150ms",
+      }}
+    ></div>
+    <div
+      className="size-2 bg-violet-600 animate-ping"
+      style={{
+        animationDelay: "225ms",
+      }}
+    ></div>
+  </div>
+);
 
 type TProps = {
   data: TGifData[];
@@ -33,6 +63,16 @@ const GifsGrid: React.FC<TProps> = ({
   const columnCount = Math.min(4, Math.floor(dimensions.width / 150)) || 1;
 
   const columnsData = splitIntoColumns(data, columnCount);
+  const loadMoreRef = useRef<HTMLDivElement>(null);
+
+  const isInView = useInView(loadMoreRef);
+
+  useEffect(() => {
+    if (isInView && hasNextPage && !isFetchingNextPage) {
+      const timeout = setTimeout(fetchNextPage, 1000);
+      return () => clearTimeout(timeout);
+    }
+  }, [isInView, hasNextPage, isFetchingNextPage, fetchNextPage]);
 
   return (
     <AnimatePresence>
@@ -41,7 +81,7 @@ const GifsGrid: React.FC<TProps> = ({
         style={{
           gridTemplateColumns: `repeat(${columnCount}, minmax(0, 1fr))`,
         }}
-        className="grid gap-1.5 md:gap-3 px-4 mt-2 mb-4"
+        className="grid gap-1.5 md:gap-3 px-2 mt-2 mb-4"
       >
         {columnsData.map((column, colIdx) => (
           <div key={colIdx} className="flex flex-col gap-0.5 md:gap-2">
@@ -70,29 +110,15 @@ const GifsGrid: React.FC<TProps> = ({
           </div>
         ))}
       </div>
-      <div className="flex items-center justify-center my-4">
-        {hasNextPage && (
-          <button
-            disabled={isFetchingNextPage}
-            aria-label="Load more GIFs"
-            title="Load more GIFs"
-            onClick={() => fetchNextPage()}
-            className="px-4 py-2 text-white bg-blue-500 flex items-center gap-1.5 justify-center rounded cursor-pointer hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {isFetchingNextPage && (
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="20"
-                height="20"
-                fill="currentColor"
-                viewBox="0 0 256 256"
-                className="animate-spin group-hover:scale-110 transition-transform"
-              >
-                <path d="M140,32V64a12,12,0,0,1-24,0V32a12,12,0,0,1,24,0Zm84,84H192a12,12,0,0,0,0,24h32a12,12,0,0,0,0-24Zm-42.26,48.77a12,12,0,1,0-17,17l22.63,22.63a12,12,0,0,0,17-17ZM128,180a12,12,0,0,0-12,12v32a12,12,0,0,0,24,0V192A12,12,0,0,0,128,180ZM74.26,164.77,51.63,187.4a12,12,0,0,0,17,17l22.63-22.63a12,12,0,1,0-17-17ZM76,128a12,12,0,0,0-12-12H32a12,12,0,0,0,0,24H64A12,12,0,0,0,76,128ZM68.6,51.63a12,12,0,1,0-17,17L74.26,91.23a12,12,0,0,0,17-17Z"></path>
-              </svg>
-            )}
-            {isFetchingNextPage ? "Loading..." : "Load More"}
-          </button>
+      <div
+        className="flex items-center justify-center my-4"
+        ref={loadMoreRef}
+        aria-live="polite"
+        aria-busy={isFetchingNextPage ? "true" : "false"}
+      >
+        {isFetchingNextPage && <Loader />}
+        {isFetchingNextPage && (
+          <span className="sr-only">Loading more content...</span>
         )}
       </div>
     </AnimatePresence>

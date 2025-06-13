@@ -1,9 +1,8 @@
 import GifsGrid from "@/components/GifsGrid";
-import Header from "@/components/Header";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { motion, useInView } from "motion/react";
-import { useEffect, useRef, useState } from "react";
-import Search from "./components/Search";
+import { motion } from "motion/react";
+import { useEffect, useState } from "react";
+import IntroSection from "./components/IntroSection";
 import withQueryClient from "./components/withQueryClient";
 import useDebounce from "./hooks/useDebounce";
 import giphyService from "./services/giphy";
@@ -13,21 +12,14 @@ const perPage = 20;
 function App() {
   const urlSearchParams = new URLSearchParams(window.location.search);
   const initialSearchQuery = urlSearchParams.get("search") || "";
-
-  const headerRef = useRef<HTMLElement>(null);
-
-  const isHeaderVisible = useInView(headerRef);
-
   const [searchQuery, setSearchQuery] = useState(initialSearchQuery);
 
   const debouncedQuery = useDebounce(searchQuery, 500);
 
   useEffect(() => {
-    if (debouncedQuery) {
-      const url = new URL(window.location.href);
-      url.searchParams.set("search", debouncedQuery);
-      window.history.pushState({}, "", url.toString());
-    }
+    const url = new URL(window.location.href);
+    url.searchParams.set("search", debouncedQuery);
+    window.history.pushState({}, "", url.toString());
   }, [debouncedQuery]);
 
   const { data, hasNextPage, fetchNextPage, isFetchingNextPage } =
@@ -74,118 +66,91 @@ function App() {
     enabled: !!debouncedQuery,
   });
 
-  const onLogoClick = () => {
-    setSearchQuery("");
-  };
-
   return (
     <>
-      <Header
-        onLogoClick={onLogoClick}
-        setSearchQuery={setSearchQuery}
-        headerRef={headerRef}
-      />
-      <Search
-        isHeaderVisible={isHeaderVisible}
-        searchQuery={searchQuery}
-        setSearchQuery={setSearchQuery}
-        fetching={isSearchingGifs}
-      />
-      <motion.div
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{
-          ease: [0.25, 0.1, 0.25, 1],
-        }}
-        exit={{ opacity: 0, y: -20 }}
-        className="w-full h-auto px-4 mt-4"
-      >
-        <img
-          className="h-auto w-full object-contain"
-          src="https://media.giphy.com/headers/2022-06-01-21-1654089664/PRIDE_BANNER_HP.gif"
-          alt="All of the Pride Month GIFs!"
-        />
-      </motion.div>
+      <IntroSection searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
 
-      {/* Search GIFs */}
-      {debouncedQuery && (
-        <>
-          {searchData?.pages &&
-          searchData.pages.length > 0 &&
-          searchData.pages[0].data.length > 0 ? (
-            <motion.div
-              initial={{ opacity: 0, y: 50 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{
-                ease: [0.25, 0.1, 0.25, 1],
-              }}
-            >
-              <h2 className="mx-4 mb-2  mt-4 flex items-center gap-2 text-2xl font-semibold text-gray-800 dark:text-gray-200 tracking-tight">
-                <img
-                  src="/magnifying-glass.svg"
-                  alt="Search"
-                  className="inline-block"
-                  width={24}
-                  height={24}
-                />
-                Search results for
-                <span className="underline text-blue-400">
-                  {debouncedQuery}
-                </span>
-              </h2>
-              <GifsGrid
-                data={searchData.pages.flatMap((page) => page.data ?? [])}
-                hasNextPage={hasSearchNextPage}
-                fetchNextPage={fetchSearchNextPage}
-                isFetchingNextPage={isSearchingNextPage}
-              />
-            </motion.div>
-          ) : (
-            isFetched &&
-            !isSearchingGifs && (
+      <main>
+        {/* Search GIFs */}
+        {debouncedQuery && (
+          <>
+            {searchData?.pages &&
+            searchData.pages.length > 0 &&
+            searchData.pages[0].data.length > 0 ? (
               <motion.div
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 50 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{
                   ease: [0.25, 0.1, 0.25, 1],
                 }}
-                className="text-center text-gray-500 mt-8 italic text-shadow-rose-500 px-4"
               >
-                No GIFs found. Try searching for something else!
+                <h2 className="mx-2 mb-6  mt-4 flex items-center gap-2 text-2xl font-semibold text-gray-800 dark:text-gray-200 tracking-tight">
+                  <img
+                    src="/magnifying-glass.svg"
+                    alt="Search"
+                    className="inline-block"
+                    width={24}
+                    height={24}
+                  />
+                  Search results for
+                  <span className="underline text-blue-400">
+                    {debouncedQuery}
+                  </span>
+                </h2>
+                <GifsGrid
+                  data={searchData.pages.flatMap((page) => page.data ?? [])}
+                  hasNextPage={hasSearchNextPage}
+                  fetchNextPage={fetchSearchNextPage}
+                  isFetchingNextPage={isSearchingNextPage}
+                />
               </motion.div>
-            )
-          )}
-        </>
-      )}
+            ) : (
+              isFetched &&
+              !isSearchingGifs && (
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{
+                    ease: [0.25, 0.1, 0.25, 1],
+                  }}
+                  className="text-center text-gray-500 mt-8 italic text-shadow-rose-500 px-4"
+                >
+                  No GIFs found. Try searching for something else!
+                </motion.div>
+              )
+            )}
+          </>
+        )}
 
-      {/* Trending GIFs */}
-      {!debouncedQuery && data?.pages && (
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{
-            ease: [0.25, 0.1, 0.25, 1],
-          }}
-        >
-          <h2 className="mx-4 mb-2  mt-4 flex items-center gap-2 text-2xl font-semibold text-gray-800 dark:text-gray-200 tracking-tight">
-            <img
-              src="/trending.svg"
-              alt="Trending"
-              className="inline-block"
-              width={24}
-              height={24}
+        {/* Trending GIFs */}
+        {!debouncedQuery && data?.pages && (
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{
+              ease: [0.25, 0.1, 0.25, 1],
+            }}
+          >
+            <h2 className="mx-2 mb-6  mt-4 flex items-center gap-2 text-2xl font-semibold text-gray-800 dark:text-gray-200 tracking-tight">
+              <img
+                src="/trending.svg"
+                alt="Trending"
+                className="inline-block"
+                width={24}
+                height={24}
+              />
+              Trending Now
+            </h2>
+
+            <GifsGrid
+              data={data.pages.flatMap((page) => page.data ?? [])}
+              hasNextPage={hasNextPage}
+              fetchNextPage={fetchNextPage}
+              isFetchingNextPage={isFetchingNextPage}
             />
-            Trending Now
-          </h2>
-
-          <GifsGrid
-            data={data.pages.flatMap((page) => page.data ?? [])}
-            hasNextPage={hasNextPage}
-            fetchNextPage={fetchNextPage}
-            isFetchingNextPage={isFetchingNextPage}
-          />
-        </motion.div>
-      )}
+          </motion.div>
+        )}
+      </main>
     </>
   );
 }
