@@ -24,7 +24,13 @@
 }
 
 body {
-  @apply min-h-screen grid;
+  @apply min-h-screen grid relative;
+}
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
   background-color: var(--color-neutral-900);
   background-image: linear-gradient(
       var(--color-neutral-800) 1px,
@@ -48,7 +54,11 @@ main {
     background-color: #ffffff;
   }
 
-  body {
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
     background-color: var(--color-gray-50);
     background-image: linear-gradient(
         var(--color-gray-200) 1px,
