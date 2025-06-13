@@ -84,7 +84,7 @@ function App() {
                   ease: [0.25, 0.1, 0.25, 1],
                 }}
               >
-                <h2 className="mx-4 mb-6  mt-4 flex items-center gap-2 text-2xl font-semibold text-gray-800 dark:text-gray-200 tracking-tight">
+                <h2 className="mx-2 mb-6  mt-4 flex items-center gap-2 text-2xl font-semibold text-gray-800 dark:text-gray-200 tracking-tight">
                   <img
                     src="/magnifying-glass.svg"
                     alt="Search"
@@ -131,7 +131,7 @@ function App() {
               ease: [0.25, 0.1, 0.25, 1],
             }}
           >
-            <h2 className="mx-4 mb-6  mt-4 flex items-center gap-2 text-2xl font-semibold text-gray-800 dark:text-gray-200 tracking-tight">
+            <h2 className="mx-2 mb-6  mt-4 flex items-center gap-2 text-2xl font-semibold text-gray-800 dark:text-gray-200 tracking-tight">
               <img
                 src="/trending.svg"
                 alt="Trending"
