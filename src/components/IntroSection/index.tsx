@@ -6,6 +6,31 @@ type TIntroSectionProps = {
   setSearchQuery: (query: string) => void;
 };
 
+const TOP_NAVIGATION_LIST = [
+  "Reactions",
+  "Entertainment",
+  "Sports",
+  "Stickers",
+  "Artists",
+];
+
+const containerVariants = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.15,
+      staggerDirection: -1,
+      ease: [0.25, 0.1, 0.25, 1],
+    },
+  },
+};
+
+const childVariants = {
+  hidden: { opacity: 0, y: 20 },
+  show: { opacity: 1, y: 0 },
+};
+
 const IntroSection = ({ searchQuery, setSearchQuery }: TIntroSectionProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const isInView = useInView(containerRef, {});
@@ -21,7 +46,10 @@ const IntroSection = ({ searchQuery, setSearchQuery }: TIntroSectionProps) => {
           backgroundRepeat: "no-repeat",
         }}
       >
-        <div
+        <motion.div
+          initial={{ opacity: 0, x: -100 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
           role="button"
           className="md:absolute left-20 top-10 cursor-pointer"
           onClick={() => setSearchQuery("")}
@@ -31,9 +59,14 @@ const IntroSection = ({ searchQuery, setSearchQuery }: TIntroSectionProps) => {
             alt="Giphy logo"
             className="w-32 md:w-40 h-auto "
           />
-        </div>
+        </motion.div>
 
-        <div className="text-center flex flex-col items-center px-6">
+        <motion.div
+          initial={{ opacity: 0, y: 100 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
+          className="text-center flex flex-col items-center px-6"
+        >
           <h1 className="text-white text-2xl md:text-6xl font-bold text-shadow-md bg-clip-text">
             Welcome to Giphy
             <br />
@@ -64,13 +97,30 @@ const IntroSection = ({ searchQuery, setSearchQuery }: TIntroSectionProps) => {
               <path d="M232.49,215.51,185,168a92.12,92.12,0,1,0-17,17l47.53,47.54a12,12,0,0,0,17-17ZM44,112a68,68,0,1,1,68,68A68.07,68.07,0,0,1,44,112Z"></path>
             </svg>
           </div>
-        </div>
+        </motion.div>
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          animate="show"
+          className="hidden md:flex items-center justify-center flex-wrap mt-4 gap-2 absolute right-20 top-10 "
+        >
+          {TOP_NAVIGATION_LIST.map((item, index) => (
+            <motion.span
+              key={index}
+              variants={childVariants}
+              className="text-white text-sm md:text-base font-medium px-3 py-1 rounded-full bg-transparent hover:bg-white/20 hover:backdrop-blur-sm transition-colors duration-200 cursor-pointer"
+              onClick={() => setSearchQuery(item)}
+            >
+              {item}
+            </motion.span>
+          ))}
+        </motion.div>
       </div>
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: !isInView ? 1 : 0, y: !isInView ? 0 : -50 }}
         transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
-        className="fixed left-1/2 -translate-x-1/2 top-4 p-1.5 px-2.5 bg-white rounded-full shadow-lg border border-gray-400/40  max-w-md w-full mt-5 text-gray-800 z-10"
+        className="fixed left-1/2 -translate-x-1/2 top-1 p-1.5 px-2.5 bg-white rounded-full shadow-lg border border-gray-400/40  max-w-md w-full mt-5 text-gray-800 z-10"
       >
         <input
           type="text"
