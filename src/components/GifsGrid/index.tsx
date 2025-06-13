@@ -69,7 +69,8 @@ const GifsGrid: React.FC<TProps> = ({
 
   useEffect(() => {
     if (isInView && hasNextPage && !isFetchingNextPage) {
-      fetchNextPage();
+      const timeout = setTimeout(fetchNextPage, 1000);
+      return () => clearTimeout(timeout);
     }
   }, [isInView, hasNextPage, isFetchingNextPage, fetchNextPage]);
 
