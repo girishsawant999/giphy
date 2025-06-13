@@ -67,11 +67,11 @@ const IntroSection = ({ searchQuery, setSearchQuery }: TIntroSectionProps) => {
           transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
           className="text-center flex flex-col items-center px-4"
         >
-          <h1 className="text-white text-2xl md:text-6xl font-bold text-shadow-md bg-clip-text">
-            Welcome to Giphy
+          <h1 className="text-white text-xl md:text-5xl font-bold text-shadow-md bg-clip-text">
+            Welcome to be Animated
             <br />
           </h1>
-          <p className="text-base md:text-2xl text-gray-200 text-shadow-2xs bg-clip-text">
+          <p className="text-base md:text-xl text-gray-200 text-shadow-2xs bg-clip-text">
             Your source for the best GIFs on the web
           </p>
 
