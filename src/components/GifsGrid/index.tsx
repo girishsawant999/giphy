@@ -109,8 +109,16 @@ const GifsGrid: React.FC<TProps> = ({
           </div>
         ))}
       </div>
-      <div className="flex items-center justify-center my-4" ref={loadMoreRef}>
+      <div
+        className="flex items-center justify-center my-4"
+        ref={loadMoreRef}
+        aria-live="polite"
+        aria-busy={isFetchingNextPage ? "true" : "false"}
+      >
         {isFetchingNextPage && <Loader />}
+        {isFetchingNextPage && (
+          <span className="sr-only">Loading more content...</span>
+        )}
       </div>
     </AnimatePresence>
   );
