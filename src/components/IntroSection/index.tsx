@@ -40,7 +40,7 @@ const IntroSection = ({ searchQuery, setSearchQuery }: TIntroSectionProps) => {
       <div
         className="min-h-[50vh] bg-gray-950 relative flex flex-col gap-5 items-center justify-center"
         style={{
-          backgroundImage: `url('https://picsum.photos/id/124/${window.innerWidth}/${window.innerHeight}')`,
+          backgroundImage: `url('https://picsum.photos/${window.innerWidth}/${window.innerHeight}')`,
           backgroundSize: "cover",
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",

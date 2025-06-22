@@ -102,7 +102,7 @@ const GifsGrid: React.FC<TProps> = ({
                     },
                   ]}
                 />
-                <div className="opacity-0 translate-y-full group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 absolute bottom-0 left-0 right-0 bg-black/90 bg-opacity-50 text-white text-sm p-2 rounded-b-md">
+                <div className="opacity-0 translate-y-full group-active:opacity-100 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 absolute bottom-0 left-0 right-0 bg-black/90 bg-opacity-50 text-white text-sm p-2 rounded-b-md">
                   {gif.title || "Untitled"}
                 </div>
               </div>
